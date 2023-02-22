@@ -1,4 +1,4 @@
-﻿using WebAppTest.Models;
+﻿using WebAppTest.Enums;
 
 namespace WebAppTest.DTOs
 {

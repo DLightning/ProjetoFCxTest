@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebAppTest.Models
+namespace WebAppTest.Enums
 {
     public enum EnumStatus
-{
+    {
         [Display(Name = "Bloqueado")]
         Blocked,
         [Display(Name = "Inativo")]

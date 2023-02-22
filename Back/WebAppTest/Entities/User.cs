@@ -1,4 +1,6 @@
-﻿namespace WebAppTest.Models
+﻿using WebAppTest.Enums;
+
+namespace WebAppTest.Models
 {
     public class User
     {

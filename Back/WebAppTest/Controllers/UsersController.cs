@@ -12,10 +12,11 @@ using System.Text;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using WebAppTest.Enums;
 
 namespace WebAppTest.Controllers
 {
-    
+
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
