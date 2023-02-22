@@ -1,0 +1,59 @@
+<div class="container my-5">
+<h1 class="mb-3">Edit User</h1>
+
+<form #form="ngForm" (ngSubmit)="updateUser()">
+    <div class="mb-3">
+        <label for="id" hidden class="form-label">Id</label>
+        <input type="id" class="form-control" id="id" name="id" hidden readonly [(ngModel)]="userDetail.id">
+      </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" [(ngModel)]="userDetail.email">
+      
+    </div>
+    <div class="mb-3">
+        <label for="username" class="form-label">UserName</label>
+        <input type="text" class="form-control" id="username" name="username" [(ngModel)]="userDetail.username">
+      </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="text" class="form-control" id="password" name="password" [(ngModel)]="userDetail.password">
+    </div>
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="userDetail.name">
+      </div>
+      <div class="mb-3">
+        <label for="cpf" class="form-label">CPF</label>
+        <input type="text" class="form-control" id="cpf" name="cpf" [(ngModel)]="userDetail.cpf">
+      </div>
+      <div class="mb-3">
+        <label for="phoneNumber" class="form-label">PhoneNumber</label>
+        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" [(ngModel)]="userDetail.phoneNumber">
+      </div>
+      <div class="mb-3">
+        <label for="motherName" class="form-label">MotherName</label>
+        <input type="text" class="form-control" id="motherName" name="motherName" [(ngModel)]="userDetail.motherName">
+      </div>
+      <div class="mb-3">
+        <label for="status" class="form-label">Status</label>
+        <select id="status" class="form-control" name="status" [(ngModel)]="userDetail.status">
+          <option *ngFor="let type of userStatus" [ngValue]="type.id">{{type.name}}</option>
+          
+        </select>
+      </div>
+      <div class="mb-3">
+
+        <label for="birthDate" class="form-label">Data de Nascimento</label>
+        <input type="text" class="form-control" id="birthDate" name="birthDate" [(ngModel)]="userDetail.birthDate">
+      </div>
+      <div> 
+        <button type="submit" style="margin-right: 15px;" class="btn btn-primary">Save</button>
+        <button type="" (click)="backToList()" class="btn btn-danger">Back</button>
+      </div>
+    
+    
+  </form>
+
+</div>
+

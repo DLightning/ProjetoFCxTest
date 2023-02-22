@@ -1,0 +1,87 @@
+<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+          <div class="card bg-dark text-white" style="border-radius: 1rem;">
+            <div class="card-body p-5 text-center">
+            
+              <div class="mb-md-5 mt-md-4 pb-5">
+  
+                <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                <p class="text-white-50 mb-5">Please enter your login and password!</p>
+                <form [formGroup]="loginForm">
+                <div class="form-outline form-white mb-4">
+                    <label class="form-label" for="typeEmailX" style="margin-left: 0px;">Email</label>
+                    <input formControlName="email" type="email" id="typeEmailX" class="form-control form-control-lg">  
+                    <small *ngIf="loginForm.controls['email'].dirty && loginForm.hasError('required','email')" class="text-danger">*Email is required</small>             
+                </div>
+                
+                <div  class="form-outline form-white mb-4">
+                    <label class="form-label" for="typePasswordX">Password</label>
+                    <div [class.error]="loginForm.controls['password'].dirty && loginForm.hasError('required','password')" class="password-input-container">
+                    <input formControlName="password" [type]="type" id="typePasswordX" class="form-control form-control-lg">
+                    <span (click)="hideShowPass()" class="fa {{eyeIcon}} password-toggle-icon"></span>
+                    <small *ngIf="loginForm.controls['password'].dirty && loginForm.hasError('required','password')" class="text-danger">*Password is required</small>
+                    </div>
+                </div>
+                <!-- Button trigger modal -->
+                  
+                
+                <p class="small mb-5 pb-lg-2">                
+                </p>
+  
+                <button [disabled]="loginForm.invalid" (click)="onLogin()" class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+  
+                
+            </form>
+              </div>
+           
+              <div>
+                <!-- Button trigger modal -->
+              <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Forgot password?
+              </button>
+                            
+               <!-- Modal -->
+              <div class="modal fade" id="exampleModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <p class="modal-title" id="exampleModalLabel">
+                        <span style="color: rgb(107, 43, 226); font-size: 25px;">Forgot password?</span><br>
+                        <small style="color: black">Please provide your Email</small>
+                      </p>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="form-group pt-2">
+                        <div class="input-field"><span class="fa fa-user p-2"></span>
+                          <input [(ngModel)]="resetPasswordEmail" class="form-control form-control-lg" type="text" placeholder="Email" id="email" name="email">
+                        </div>
+                        <div class="input-field"><span class="fa fa-user p-2"></span>
+                          <input [(ngModel)]="resetPasswordPassword" class="form-control form-control-lg" type="text" placeholder="New Password" id="password" name="password">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button id="closebtn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" (click)="confirmToSend()" class="btn btn-primary">Send</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+  
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+   
+  </section>
+  <script>
+  $('#exampleModalCenter').on('shown.bs.modal', function () {
+    $('#exampleModalCenter').trigger('focus')
+  })
+  </script>

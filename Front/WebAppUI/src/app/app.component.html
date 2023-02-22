@@ -1,0 +1,61 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <!-- Container wrapper -->
+  <div class="container">
+    <!-- Navbar brand -->
+    <a class="navbar-brand me-2" href="#" *ngIf="isLogged() == false">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/15/15719.png"
+        height="30"
+        loading="lazy"
+        style="margin-top: -1px;"
+      />
+      Home
+    </a>
+    <a class="navbar-brand me-2" href="/usersList" *ngIf="isLogged() == true">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/15/15719.png"
+        height="30"
+        loading="lazy"
+        style="margin-top: -1px;"
+      />
+      Home
+    </a>
+
+    <!-- Toggle button -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-mdb-toggle="collapse"
+      data-mdb-target="#navbarButtonsExample"
+      aria-controls="navbarButtonsExample"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Collapsible wrapper -->
+    <div class="collapse navbar-collapse" id="navbarButtonsExample">
+      <!-- Left links -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        
+      </ul>
+      <!-- Left links -->
+
+      <div class="d-flex align-items-center">
+        <button *ngIf="isLogged() == false" [routerLink]="['login']" type="button" class="btn btn-primary me-3">
+          Login
+        </button>
+        <button *ngIf="isLogged() == true" (click)="signoff()" type="button" class="btn btn-danger me-3">
+          Log Off
+        </button>
+      </div>
+    </div>
+    <!-- Collapsible wrapper -->
+  </div>
+  <!-- Container wrapper -->
+</nav>
+<!-- Navbar -->
+<router-outlet></router-outlet>
+<lib-ng-toast></lib-ng-toast>

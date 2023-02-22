@@ -1,0 +1,41 @@
+<div class="container my-5">
+  <h1 class="mb-3">Add User</h1>
+  
+  <form #form="ngForm" (ngSubmit)="addUser()">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" [(ngModel)]="addUserDetail.email">
+        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+      </div>
+      <div class="mb-3">
+          <label for="username" class="form-label">UserName</label>
+          <input type="text" class="form-control" id="username" name="username" [(ngModel)]="addUserDetail.username">
+        </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="text" class="form-control" id="password" name="password" [(ngModel)]="addUserDetail.password">
+      </div>
+      <div class="mb-3">
+          <label for="name" class="form-label">Name</label>
+          <input type="text" class="form-control" id="name" name="name" [(ngModel)]="addUserDetail.name">
+        </div>
+        <div class="mb-3">
+          <label for="cpf" class="form-label">CPF</label>
+          <input type="text" class="form-control" id="cpf" name="cpf" [(ngModel)]="addUserDetail.cpf">
+        </div>
+        <div class="mb-3">
+          <label for="phoneNumber" class="form-label">PhoneNumber</label>
+          <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" [(ngModel)]="addUserDetail.phoneNumber">
+        </div>
+        <div class="mb-3">
+          <label for="motherName" class="form-label">MotherName</label>
+          <input type="text" class="form-control" id="motherName" name="motherName" [(ngModel)]="addUserDetail.motherName">
+        </div>      
+        <div class="mb-3">
+          <label for="birthDate" class="form-label">Data de Nascimento</label>
+          <input type="text" class="form-control" id="birthDate" name="birthDate" [(ngModel)]="addUserDetail.birthDate" >
+        </div>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+  
+  </div>
