@@ -29,23 +29,36 @@ export class UsersService {
   }
 
   updateUser(id: string, userObj: User): Observable<User>{
-    console.log(userObj)
+    
     return this.http.put<User>(this.baseApiUrl + '/api/Users/' + id, userObj);
+  }
+
+  search(search: string): Observable<User[]>{
+    const url = `?search=${search}`
+    return this.http.get<User[]>(this.baseApiUrl + '/api/Users/search'+ url);
   }
 
   resetPassword(email: string, password: string): Observable<User>{
     const url = `?email=${email}&password=${password}`
     return this.http.put<User>(this.baseApiUrl + '/api/Users/reset' + url, email);
   }
+
   getUsersByAgeRange(minAge: number, maxAge: number): Observable<User[]>{
     const url = `?minAge=${minAge}&maxAge=${maxAge}`;
     return this.http.get<User[]>(this.baseApiUrl + '/api/Users/age-range'+ url);
   }
+
   getUsersbyStatus(status: string): Observable<User[]>{
     const url = `?status=${status}`
     return this.http.get<User[]>(this.baseApiUrl + '/api/Users/status'+ url);
   }
+
   deleteUser(id: string): Observable<User>{
     return this.http.put<User>(this.baseApiUrl + '/api/Users/delete' + id, id);
+  }
+
+  changeStatus(id: string, status: number): Observable<User>{
+    const url = `${id}?status=${status}`
+    return this.http.put<User>(this.baseApiUrl + '/api/Users/changeStatus' + url, url);
   }
 }
