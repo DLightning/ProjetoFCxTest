@@ -67,7 +67,7 @@ export class UsersListComponent implements OnInit{
         this.users = res;
       },
       error:(response) => {
-        this.toast.error({detail: "ERROR", summary: response.message, duration: 5000})
+        this.toast.error({detail: "ERROR", summary: response.message, duration: 2000})
         this.loadAllUsers();
       }
     })
@@ -96,7 +96,7 @@ export class UsersListComponent implements OnInit{
             this.users = res;
           },
           error:(response) => {
-            this.toast.error({detail: "ERROR", summary: response.message, duration: 5000})
+            this.toast.error({detail: "ERROR", summary: response.message, duration: 2000})
           }
         })
       }else{
@@ -112,7 +112,7 @@ export class UsersListComponent implements OnInit{
             this.users = res;
           },
           error:(response) => {
-            this.toast.error({detail: "ERROR", summary: response.message, duration: 5000})
+            this.toast.error({detail: "ERROR", summary: response.message, duration: 2000})
           }
         })
       }else{

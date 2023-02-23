@@ -191,6 +191,7 @@ namespace WebAppTest.Controllers
                 return NotFound();
             }
             user.Status = (EnumStatus)status;
+            user.AlterationDate = DateTime.Now;
             await _webDbContext.SaveChangesAsync();
 
             return Ok(user);
