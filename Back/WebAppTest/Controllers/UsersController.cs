@@ -1,18 +1,14 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Extensions;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using WebAppTest.Data;
 using WebAppTest.DTOs;
-using WebAppTest.Models;
-using System.Text;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using System;
 using WebAppTest.Enums;
+using WebAppTest.Models;
 
 namespace WebAppTest.Controllers
 {
@@ -30,7 +26,7 @@ namespace WebAppTest.Controllers
         }
 
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody]User loginObj)
+        public async Task<IActionResult> Authenticate([FromBody] User loginObj)
         {
             if (loginObj == null)
             {
@@ -38,16 +34,17 @@ namespace WebAppTest.Controllers
             }
             var user = await _webDbContext.Users.FirstOrDefaultAsync(x => x.Email == loginObj.Email && x.Password == loginObj.Password);
             var userDto = _mapper.Map<UserDTO>(user);
-            
+
 
             if (user != null)
             {
                 userDto.Token = CreateJwtToken(userDto);
-                if (user.Status == EnumStatus.Active) { 
-                    return Ok(new 
+                if (user.Status == EnumStatus.Active)
+                {
+                    return Ok(new
                     {
                         Token = userDto.Token,
-                        Message = "Login Success" 
+                        Message = "Login Success"
                     });
                 }
                 else
@@ -56,9 +53,9 @@ namespace WebAppTest.Controllers
                 }
             }
 
-            return NotFound(new 
-            {   
-                Message = "User Not Found!" 
+            return NotFound(new
+            {
+                Message = "User Not Found!"
             });
 
         }
@@ -66,11 +63,11 @@ namespace WebAppTest.Controllers
         [HttpPut("reset")]
         public async Task<IActionResult> ResetPassword(string email, string password)
         {
-            if(!UserEmail(email))
+            if (!UserEmail(email))
             {
                 return BadRequest();
             }
-            
+
             var user = await _webDbContext.Users.FirstOrDefaultAsync(x => x.Email == email);
             user.Password = password;
             _webDbContext.SaveChanges();
@@ -96,12 +93,13 @@ namespace WebAppTest.Controllers
             //return Ok(users);
         }
 
-        
+
         [HttpPost]
-        public async Task<IActionResult> AddUser([FromBody]UserDTO userRequest)
+        public async Task<IActionResult> AddUser([FromBody] UserDTO userRequest)
         {
-            if(userRequest == null) { 
-                return BadRequest(); 
+            if (userRequest == null)
+            {
+                return BadRequest();
             }
             if (UserNameExists(userRequest.Username))
             {
@@ -126,7 +124,7 @@ namespace WebAppTest.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
-        public async Task<IActionResult> UpdateUser([FromRoute]Guid id,[FromBody]UserDTO userObj)
+        public async Task<IActionResult> UpdateUser([FromRoute] Guid id, [FromBody] UserDTO userObj)
         {
             var user = await _webDbContext.Users.FindAsync(id);
             if (user == null)
@@ -166,7 +164,7 @@ namespace WebAppTest.Controllers
                 return NotFound();
             }
             user.Status = EnumStatus.Inactive;
-            
+
             await _webDbContext.SaveChangesAsync();
 
             return Ok(user);
@@ -185,36 +183,49 @@ namespace WebAppTest.Controllers
         }
 
         [HttpPut("changeStatus{id}")]
-        public async Task<IActionResult> changeStatus(Guid id, string status)
+        public async Task<IActionResult> changeStatus(Guid id, int status)
         {
             var user = await _webDbContext.Users.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
-            var newStatusEnum = (EnumStatus)Enum.Parse(typeof(EnumStatus), status);
-            user.Status = newStatusEnum;
+            user.Status = (EnumStatus)status;
             await _webDbContext.SaveChangesAsync();
 
             return Ok(user);
         }
 
-
         [HttpGet]
-        [Route("username")]
-        public async Task<IActionResult> GetUserByLogin(string username)
+        [Route("search")]
+        public async Task<IActionResult> Search(string search)
         {
-            var users = await _webDbContext.Users.ToListAsync();
-
-            var filteredUsers = users.Where(u => u.Username == username);
-
-            if (filteredUsers == null || !filteredUsers.Any())
+           
+            var result = GetUserByLogin(search);
+            if (result != null)
             {
-                return NotFound();
+                return Ok(result);
+            }
+            result = GetUsersByCpf(search);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            result = GetSearchByName(search);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            result = GetUsersBySearchStatus(search); 
+            if (result != null)
+            {
+                return Ok(result);
             }
 
-            return Ok(filteredUsers);
+
+            return BadRequest();
         }
+
 
         [HttpGet]
         [Route("status")]
@@ -225,23 +236,6 @@ namespace WebAppTest.Controllers
             var filteredUsers = users.Where(u => u.Status.ToString() == status);
 
             if (filteredUsers == null || !filteredUsers.Any())
-            {              
-                return NotFound();
-            }
-
-            return Ok(filteredUsers);
-
-        }
-
-        [HttpGet]
-        [Route("cpf")]
-        public async Task<IActionResult> GetUsersByCpf(string cpf)
-        {
-            var users = await _webDbContext.Users.ToListAsync();
-
-            var filteredUsers = users.Where(u => u.Cpf == cpf);
-
-            if (filteredUsers == null || !filteredUsers.Any())
             {
                 return NotFound();
             }
@@ -249,6 +243,7 @@ namespace WebAppTest.Controllers
             return Ok(filteredUsers);
 
         }
+
 
         [HttpGet]
         [Route("inclusiondate-range")]
@@ -313,7 +308,8 @@ namespace WebAppTest.Controllers
                 .AsEnumerable()
                 .Where(u => CalculateAge(u.BirthDate.Date) >= minAge && CalculateAge(u.BirthDate.Date) < maxAge).ToList();
 
-            foreach (var user in users) { 
+            foreach (var user in users)
+            {
 
                 if (user.Status != EnumStatus.Inactive)
                 {
@@ -321,8 +317,8 @@ namespace WebAppTest.Controllers
                 }
             }
 
-            if (result == null || users.Count == 0) 
-            { 
+            if (result == null || users.Count == 0)
+            {
                 return NotFound();
             }
 
@@ -335,6 +331,67 @@ namespace WebAppTest.Controllers
             var age = today.Year - dateOfBirth.Year;
             if (dateOfBirth > today.AddYears(-age)) age--;
             return age;
+        }
+        
+        private IEnumerable<User> GetSearchByName(string searchSubstring)
+        {
+            var users = _webDbContext.Users.ToArray();
+            List<User> matchingNames = new List<User>();
+            if (users.Length > 0)
+            {
+                foreach (var user in users)
+                {
+                    if (user.Name.Contains(searchSubstring))
+                    {
+                        matchingNames.Add(user);
+                    }
+                }
+            }
+            return matchingNames;
+        }
+
+        private IEnumerable<User> GetUsersBySearchStatus(string status)
+        {
+            var users = _webDbContext.Users.ToList();
+
+            var filteredUsers = users.Where(u => u.Status.ToString() == status);
+
+            if (filteredUsers == null || !filteredUsers.Any())
+            {
+                return null;
+            }
+
+            return filteredUsers;
+
+        }
+
+        private IEnumerable<User> GetUsersByCpf(string cpf)
+        {
+            var users = _webDbContext.Users.ToList();
+
+            var filteredUsers = users.Where(u => u.Cpf == cpf);
+
+            if (filteredUsers == null || !filteredUsers.Any())
+            {
+                return null;
+            }
+
+            return filteredUsers;
+
+        }
+
+        private IEnumerable<User> GetUserByLogin(string username)
+        {
+            var users = _webDbContext.Users.ToList();
+
+            var filteredUsers = users.Where(u => u.Username == username);
+
+            if (filteredUsers == null || !filteredUsers.Any())
+            {
+                return null;
+            }
+
+            return filteredUsers;
         }
 
         private bool UserExists(Guid id)
@@ -358,7 +415,7 @@ namespace WebAppTest.Controllers
             var identity = new ClaimsIdentity(new Claim[]
             {
                 new Claim(ClaimTypes.Name, user.Name),
-               
+
             });
 
             var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature);
